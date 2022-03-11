@@ -21,3 +21,7 @@ app.use('/users', usersRouter);
 app.use('/api/rooms', roomsRouter);
 
 module.exports = app;
+
+var cardsRouter = require('./routes/cardsRoutes');
+    app.use('/api/cards',cardsRouter);
+    
