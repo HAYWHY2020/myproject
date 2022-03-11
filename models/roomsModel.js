@@ -10,7 +10,9 @@ module.exports.getAllRooms = async function() {
     console.log(err);
     return { status: 500, result: err};
   }
-} module.exports.play = async function (id, value) {
+} 
+
+module.exports.play = async function (id, value) {
   try {
     if (!beats[value]) {
       return { status: 400, result: { msg: "Card value is not valid (rock,paper,scissors)" } };
