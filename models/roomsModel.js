@@ -2,7 +2,8 @@ var pool = require('./connection.js')
 
 module.exports.getAllRooms = async function() {
   try {
-    let sql = "Select * from room";
+    let sql = `Select roo_id,roo_name, crd_name as roo_topcard 
+                from room, card where roo_topcard_id = crd_id`;
     let result = await pool.query(sql);
     let rooms = result.rows;
     return { status: 200, result: rooms};
@@ -15,7 +16,8 @@ module.exports.getAllRooms = async function() {
 
 module.exports.getRoomById = async function (id) {
   try {
-    let sql = "Select * from room where roo_id = $1";
+    let sql = `Select roo_id,roo_name, crd_name as roo_topcard 
+    from room, card where roo_topcard_id = crd_id`
     let result = await pool.query(sql, [id]);
     if (result.rows.length > 0) {
       let room = result.rows[0];
@@ -79,10 +81,11 @@ module.exports.getRoomByNameOrTopCard = async function (parameters) {
     }
     let nparam = 1;
     let values = [];
-    let sql = "Select * from room where";
+    let sql = `Select roo_id,roo_name, crd_name as roo_topcard 
+    from room, card where roo_topcard_id = crd_id`
 
     if (parameters.name) {
-      sql += ` roo_name LIKE $${nparam}`;
+      sql += ` and roo_name ILIKE $${nparam}`;
       values.push("%"+parameters.name+"%");
       nparam++;
     }
