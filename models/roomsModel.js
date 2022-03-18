@@ -12,6 +12,24 @@ module.exports.getAllRooms = async function() {
   }
 } 
 
+
+module.exports.getRoomById = async function (id) {
+  try {
+    let sql = "Select * from room where roo_id = $1";
+    let result = await pool.query(sql, [id]);
+    if (result.rows.length > 0) {
+      let room = result.rows[0];
+      return { status: 200, result: room };
+    } else {
+      return { status: 404, result: { msg: "No room with that id" } };
+    }
+  } catch (err) {
+    console.log(err);
+    return { status: 500, result: err };
+  }
+}
+
+var beats = { rock: 'scissors', scissors: 'paper', paper: 'rock' };
 module.exports.play = async function (id, value) {
   try {
     if (!beats[value]) {
