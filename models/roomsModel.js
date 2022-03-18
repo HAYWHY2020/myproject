@@ -37,11 +37,12 @@ module.exports.play = async function (id, value) {
     if (!beats[value]) {
       return { status: 400, result: { msg: "Card value is not valid (rock,paper,scissors)" } };
     }
-    let sql = "Select * from room where roo_id = $1";
-    let result = await pool.query(sql, [id]);
-    if (result.rows.length == 0) {
-      return { status: 404, result: { msg: "No room with that id" } };
-    }
+    let sql = `select * from room, card, cardwcard
+    where room.roo_id = $1 and
+    room.roo_topcard_id = cardwcard.cwc_clooses_id and
+    card.crd_id = cardwcard.cwc_cwins_id and
+    card.crd_name ILIKE $2;`
+    
     let room = result.rows[0];
     if (beats[value] != room.roo_topcard.toLowerCase()) {
       return {
